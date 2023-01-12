@@ -7,7 +7,6 @@ class VideoItem extends StatefulWidget {
   final String clipUrl;
   final bool shouldPlay;
 
-
   const VideoItem({
     super.key,
     required this.clipUrl,
@@ -25,8 +24,7 @@ class _VideoItemState extends State<VideoItem>
   late Animation<double> animation;
   bool initialized = false;
   void _setVideoContoller() {
-    _controller = VideoPlayerController.network(
-        widget.clipUrl,
+    _controller = VideoPlayerController.network(widget.clipUrl,
         videoPlayerOptions: VideoPlayerOptions(
           mixWithOthers: false,
           allowBackgroundPlayback: false,
@@ -59,10 +57,16 @@ class _VideoItemState extends State<VideoItem>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (widget.shouldPlay) _controller.play();
-    else _controller.pause();
-    final isPlaying = _controller.value.isPlaying;
+    if (widget.shouldPlay)
+      _controller.play();
+    else
+      _controller.pause();
     return Scaffold(
       extendBody: true,
       bottomNavigationBar: BottomAppBar(
@@ -71,7 +75,7 @@ class _VideoItemState extends State<VideoItem>
       ),
       body: InkWell(
         onTap: () {
-          if (isPlaying) {
+          if (_controller.value.isPlaying) {
             _controller.pause();
           } else {
             _controller.play();
